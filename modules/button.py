@@ -3,12 +3,24 @@ import pygame
 pygame.font.init()
 
 
-class Button:
-    button_list = []
+class DictButton(type):
+    _list = None
+
+    def __iter__(cls):
+        return iter(cls._list.items())
+
+    def __getitem__(cls, key):
+        return cls._list[key]
+
+
+class Button(metaclass=DictButton):
+    _list = {}
 
     def __init__(self, x, y, width=100, height=50, colors=((220, 100, 100), (180, 100, 100), (120, 100, 100)),
-                 text="", font=36, font_colors=((220, 220, 220), (180, 220, 220), (120, 180, 180)), trigger=None):
-        self.button_list.append(self)
+                 text="", font=36, font_colors=((220, 220, 220), (180, 220, 220), (120, 180, 180)),
+                 trigger=None, tag=str(len(_list))):
+        # assert(type(self.__list[tag]) is not Button)
+        self._list[tag] = self
 
         self.x = x
         self.y = y
