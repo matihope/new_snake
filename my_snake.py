@@ -44,8 +44,8 @@ def update_scale_dependents():
 
     Button(x=window_width // 2 - 150 * scale, y=window_height - 200 * scale, width=300 * scale,
            height=150 * scale, text='Play!', font=int(72 * scale), trigger=game_loop, tag='button_play')
-    Button(x=window_width // 2 - 100 * scale, y=window_height - 400 * scale, width=200 * scale,
-           height=100 * scale, text='Apply', font=int(48 * scale), trigger=update_scale, tag='button_apply')
+    Button(x=window_width // 2 - 125 * scale, y=window_height - 400 * scale, width=250 * scale,
+           height=100 * scale, text='Change scale', font=int(48 * scale), trigger=update_scale, tag='button_scale')
 
 
 def game_loop():
