@@ -3,6 +3,7 @@
 import pygame
 from modules.level import Level
 from modules.button import Button
+from modules.screen import Screen
 
 pygame.init()
 
@@ -21,13 +22,20 @@ score_board_color = (120, 120, 120)
 
 def update_scale_dependents():
     global tile_size, buff, window_width, window_height, window
+    # Window managment variables
     tile_size = int(50 * scale)
     buff = int(15 * scale)
     window_width = (board_width * tile_size) + buff*2
     window_height = (board_height * tile_size) + tile_size*2 + buff*3
     window = pygame.display.set_mode((window_width, window_height))
 
-    global snake_head, snake_body, fruit_body, score_board, font
+    global score_board, font
+    # Score board
+    score_board = pygame.Surface((board_width * tile_size, tile_size * 2))
+    font = pygame.font.SysFont("", int(72 * scale))
+
+
+def snake_game_loop():
     # Snake head
     snake_head = pygame.Surface((tile_size, tile_size))
     snake_head.fill((50, 200, 50))
@@ -37,18 +45,7 @@ def update_scale_dependents():
     # Fruit body
     fruit_body = pygame.Surface((tile_size, tile_size))
     fruit_body.fill((200, 65, 65))
-    # Score board
-    score_board = pygame.Surface((board_width * tile_size, tile_size * 2))
 
-    font = pygame.font.SysFont("", int(72 * scale))
-
-    Button(x=window_width // 2 - 150 * scale, y=window_height - 200 * scale, width=300 * scale,
-           height=150 * scale, text='Play!', font=int(72 * scale), trigger=game_loop, tag='button_play')
-    Button(x=window_width // 2 - 125 * scale, y=window_height - 400 * scale, width=250 * scale,
-           height=100 * scale, text='Change scale', font=int(48 * scale), trigger=update_scale, tag='button_scale')
-
-
-def game_loop():
     game = Level(board_width, board_height, tile_size, mps, black, snake_head, snake_body, fruit_body)
     game_board = pygame.Surface((board_width * tile_size, board_height * tile_size))
     window.fill(border_color)
@@ -86,6 +83,11 @@ def game_loop():
 
 
 def menu():
+    menu_screen = Screen()
+    menu_screen.add_button(Button(x=window_width // 2 - 150 * scale, y=window_height - 200 * scale, width=300 * scale,
+           height=150 * scale, text='Play snake!', font=int(72 * scale), trigger=snake_game_loop, tag='button_play'))
+    menu_screen.add_button(Button(x=window_width // 2 - 125 * scale, y=window_height - 400 * scale, width=250 * scale,
+           height=100 * scale, text='Change scale', font=int(48 * scale), trigger=update_scale, tag='button_scale'))
     run = True
     while run:
         for e in pygame.event.get():
@@ -95,14 +97,12 @@ def menu():
                 exit('-> User quit')
 
         # Logic
-        for _, button in Button:
-            button.update(pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1], pygame.mouse.get_pressed()[0])
+        menu_screen.update(pygame.mouse)
 
         # Drawing
         window.fill((255, 255, 255))
 
-        for _, button in Button:
-            button.draw(window)
+        menu_screen.draw(window)
 
         pygame.display.update()
 

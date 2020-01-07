@@ -19,7 +19,6 @@ class Button(metaclass=DictButton):
     def __init__(self, x, y, width=100, height=50, colors=((220, 100, 100), (180, 100, 100), (120, 100, 100)),
                  text="", font=36, font_colors=((220, 220, 220), (180, 220, 220), (120, 180, 180)),
                  trigger=None, tag=str(len(_list))):
-        assert(tag not in self._list.keys())
         self._list[tag] = self
 
         self.x = x
