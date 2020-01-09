@@ -1,3 +1,6 @@
+from pygame import transform
+
+
 class Screen:
     def __init__(self):
         self.button_dict = {}
@@ -6,9 +9,9 @@ class Screen:
         self.drawable_dicts = [self.button_dict, self.custom_drawable]
         self.sorted_draw_list = []
 
-    def update(self, mouse):
+    def update(self, mouse_x, mouse_y, mouse_pressed):
         for button in self.button_dict.keys():
-            button.update(mouse.get_pos()[0], mouse.get_pos()[1], mouse.get_pressed()[0])
+            button.update(mouse_x, mouse_y, mouse_pressed)
 
     def draw(self, surface):
         for obj, _ in self.sorted_draw_list:

@@ -16,39 +16,41 @@ class DictButton(type):
 class Button(metaclass=DictButton):
     _list = {}
 
-    def __init__(self, x, y, width=100, height=50, scale=1, align_x='center', align_y='center'
+    def __init__(self, x, y, width=100, height=50, align_x='center', align_y='center',
                  colors=((220, 100, 100), (180, 100, 100), (120, 100, 100)),
-                 text="", font=36, font_colors=((220, 220, 220), (180, 220, 220), (120, 180, 180)),
-                 trigger=None, tag=str(len(_list))):
+                 text="", font_size=36, font_colors=((220, 220, 220), (180, 220, 220), (120, 180, 180)),
+                 trigger=None, long_press=True, tag=str(len(_list))):
         self._list[tag] = self
 
         self.x = x
         self.y = y
-        self.draw_x = x, self.draw_y = y
         self.width = width
         self.height = height
-        self.scale = scale
         self.align_x = align_x
         self.align_y = align_y
         self.colors = colors
         self.text = text
         self.font_colors = font_colors
 
+        self.draw_x = self.x - self.width//2  # Default align_x='center'
+        self.draw_y = self.y - self.height//2  # Default align_y='center'
+        if align_x == 'left':
+            self.draw_x = self.x
+        elif align_x == 'right':
+            self.draw_x = self.x + self.width
+        if align_y == 'top':
+            self.draw_y = self.y
+        elif align_y == 'bottom':
+            self.draw_y = self.y + self.height
+
+        self.font = pygame.font.SysFont('', font_size)
+        self.body = pygame.Surface((self.width, self.height))
+
         self.pressed = False
         self.enabled = True
         self.visible = True
 
-        # font argument can either be pygame.font.Font or font size
-        if font is pygame.font.Font:
-            self.font = font
-        else:
-            self.font = pygame.font.SysFont("", font)
-
         self.trigger = trigger
-
-
-        self.body = pygame.Surface((self.width, self.height))
-        self.update(0, 0, False)
 
     def update(self, mouse_x, mouse_y, mouse_press):
         if self.enabled:
@@ -70,23 +72,15 @@ class Button(metaclass=DictButton):
 
     def draw(self, surface):
         if self.visible:
-            surface.blit(self.body, (self.x, self.y))
+            surface.blit(self.body, (self.draw_x, self.draw_y))
 
     def is_hovering(self, mouse_x, mouse_y):
-        if mouse_x < self.x:
+        if mouse_x < self.draw_x:
             return False
-        elif self.x + self.width < mouse_x:
+        elif self.draw_x + self.width < mouse_x:
             return False
-        elif mouse_y < self.y:
+        elif mouse_y < self.draw_y:
             return False
-        elif self.y + self.height < mouse_y:
+        elif self.draw_y + self.height < mouse_y:
             return False
         return True
-
-    def update_scale(self, scale):
-        self.draw_x = self.x
-        self.draw_y = self.y
-
-
-
-    
