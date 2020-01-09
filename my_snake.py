@@ -84,10 +84,10 @@ def snake_game_loop():
 
 def menu():
     menu_screen = Screen()
-    menu_screen.add_button(Button(x=window_width // 2 - 150 * scale, y=window_height - 200 * scale, width=300 * scale,
-           height=150 * scale, text='Play snake!', font=int(72 * scale), trigger=snake_game_loop, tag='button_play'))
-    menu_screen.add_button(Button(x=window_width // 2 - 125 * scale, y=window_height - 400 * scale, width=250 * scale,
-           height=100 * scale, text='Change scale', font=int(48 * scale), trigger=update_scale, tag='button_scale'))
+    menu_screen.add_button(Button(x=window_width // 2, y=window_height, width=300, height=150, scale=scale,
+                                  text='Play snake!', font=int(72 * scale), trigger=snake_game_loop, tag='button_play'))
+    menu_screen.add_button(Button(x=window_width // 2, y=window_height, width=250, height=100, scale=scale,
+                                  text='Change scale', font=int(48 * scale), trigger=update_scale, tag='button_scale'))
     run = True
     while run:
         for e in pygame.event.get():
@@ -105,7 +105,6 @@ def menu():
         menu_screen.draw(window)
 
         pygame.display.update()
-
         clock.tick(FPS)
 
 

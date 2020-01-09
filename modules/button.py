@@ -16,15 +16,20 @@ class DictButton(type):
 class Button(metaclass=DictButton):
     _list = {}
 
-    def __init__(self, x, y, width=100, height=50, colors=((220, 100, 100), (180, 100, 100), (120, 100, 100)),
+    def __init__(self, x, y, width=100, height=50, scale=1, align_x='center', align_y='center'
+                 colors=((220, 100, 100), (180, 100, 100), (120, 100, 100)),
                  text="", font=36, font_colors=((220, 220, 220), (180, 220, 220), (120, 180, 180)),
                  trigger=None, tag=str(len(_list))):
         self._list[tag] = self
 
         self.x = x
         self.y = y
+        self.draw_x = x, self.draw_y = y
         self.width = width
         self.height = height
+        self.scale = scale
+        self.align_x = align_x
+        self.align_y = align_y
         self.colors = colors
         self.text = text
         self.font_colors = font_colors
@@ -40,6 +45,7 @@ class Button(metaclass=DictButton):
             self.font = pygame.font.SysFont("", font)
 
         self.trigger = trigger
+
 
         self.body = pygame.Surface((self.width, self.height))
         self.update(0, 0, False)
@@ -76,3 +82,11 @@ class Button(metaclass=DictButton):
         elif self.y + self.height < mouse_y:
             return False
         return True
+
+    def update_scale(self, scale):
+        self.draw_x = self.x
+        self.draw_y = self.y
+
+
+
+    
