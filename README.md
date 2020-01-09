@@ -1,4 +1,4 @@
 new_snake
 
 ### TODO:
-  * Fix toggle_smooth
+  * Fix long_press
