@@ -2,7 +2,7 @@ from modules import fruit, player
 from modules.cf import collision
 
 
-class Level:
+class SnakeGame:
     def __init__(self, size_x, size_y, tile_size, mps, bg, snake_head, snake_body, fruit_body):
         self.size_x, self.size_y = size_x, size_y
         self.tile_size = tile_size

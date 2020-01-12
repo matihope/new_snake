@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 import pygame
-from modules.level import Level
+from modules.level import SnakeGame
 from modules.button import Button
 from modules.screen import Screen
 
@@ -21,12 +21,12 @@ score_board_color = (120, 120, 120)
 # Unscaled window
 TILE_SIZE = 50
 BUFF = 15
-WINDOW_WIDTH = (board_width * TILE_SIZE) + BUFF * 2
-WINDOW_HEIGHT = (board_height * TILE_SIZE) + TILE_SIZE * 2 + BUFF * 3
+WINDOW_WIDTH = (board_width * TILE_SIZE) + BUFF*2
+WINDOW_HEIGHT = (board_height * TILE_SIZE) + TILE_SIZE*2 + BUFF*3
 WINDOW = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 # Score board
-score_board = pygame.Surface((board_width * TILE_SIZE, TILE_SIZE * 2))
+score_board = pygame.Surface((board_width * TILE_SIZE, TILE_SIZE*2))
 FONT = pygame.font.SysFont("", 72)
 
 
@@ -34,10 +34,8 @@ def update_scale_dependents():
     global window_width_real, window_height_real, window_real
 
     # window_real variables
-    t_s = TILE_SIZE * scale
-    b_s = BUFF * scale
-    window_width_real = int((board_width * t_s) + b_s*2)
-    window_height_real = int((board_height * t_s) + t_s*2 + b_s*3)
+    window_width_real = int(WINDOW_WIDTH * scale)
+    window_height_real = int(WINDOW_HEIGHT * scale)
     window_real = pygame.display.set_mode((window_width_real, window_height_real))
 
 
@@ -52,7 +50,7 @@ def snake_game_loop():
     fruit_body = pygame.Surface((TILE_SIZE, TILE_SIZE))
     fruit_body.fill((200, 65, 65))
 
-    game = Level(board_width, board_height, TILE_SIZE, mps, black, snake_head, snake_body, fruit_body)
+    game = SnakeGame(board_width, board_height, TILE_SIZE, mps, black, snake_head, snake_body, fruit_body)
     game_board = pygame.Surface((board_width * TILE_SIZE, board_height * TILE_SIZE))
     WINDOW.fill(border_color)
 
@@ -97,7 +95,7 @@ def menu():
                                   text='Change scale', font_size=48, trigger=update_scale, tag='button_scale'))
     menu_screen.add_button(Button(x=WINDOW_WIDTH // 2, y=WINDOW_HEIGHT - 500, width=250, height=100,
                                   text='Toggle smooth', font_size=48, trigger=toggle_smooth,
-                                  long_click=False, tag='button_smooth'))
+                                  long_press=False, tag='button_smooth'))
 
     run = True
     while run:
@@ -141,9 +139,10 @@ def toggle_smooth():
 
 
 if __name__ == "__main__":
+    update_scale_dependents()
+
     pygame.init()
 
-    update_scale_dependents()
     menu()
 
 pygame.quit()

@@ -46,6 +46,8 @@ class Button(metaclass=DictButton):
         self.font = pygame.font.SysFont('', font_size)
         self.body = pygame.Surface((self.width, self.height))
 
+        self.long_press = long_press
+        self.__pressed_last_update = False
         self.pressed = False
         self.enabled = True
         self.visible = True
@@ -55,14 +57,21 @@ class Button(metaclass=DictButton):
     def update(self, mouse_x, mouse_y, mouse_press):
         if self.enabled:
 
+            self.__pressed_last_update = self.pressed
             self.pressed = False
+
             col = 0
             if self.is_hovering(mouse_x, mouse_y):
-                self.pressed = mouse_press
                 col = 2 if mouse_press else 1
 
+                self.pressed = mouse_press
+
                 if mouse_press and self.trigger is not None:
-                    self.trigger()
+                    if self.long_press:
+                        self.trigger()
+                    else:
+                        if not self.__pressed_last_update:
+                            self.trigger()
 
             self.body.fill(self.colors[col])
 
