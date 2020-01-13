@@ -9,7 +9,7 @@ from modules.screen import Screen
 scale = 0.75
 board_width, board_height = 20, 20
 
-smooth = False
+smooth = True
 FPS = 60
 mps = 5
 clock = pygame.time.Clock()
@@ -131,6 +131,13 @@ def real_draw(surface, draw_smooth=False):
         pygame.transform.smoothscale(surface, (window_width_real, window_height_real), window_real)
     else:
         pygame.transform.scale(surface, (window_width_real, window_height_real), window_real)
+
+
+def show_fps(surface):
+    """
+    Work on that function
+    """
+    pass
 
 
 def toggle_smooth():
