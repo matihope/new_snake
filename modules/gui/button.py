@@ -37,11 +37,11 @@ class Button(metaclass=DictButton):
         if align_x == 'left':
             self.draw_x = self.x
         elif align_x == 'right':
-            self.draw_x = self.x + self.width
+            self.draw_x = self.x - self.width
         if align_y == 'top':
             self.draw_y = self.y
         elif align_y == 'bottom':
-            self.draw_y = self.y + self.height
+            self.draw_y = self.y - self.height
 
         self.font = pygame.font.SysFont('', font_size)
         self.body = pygame.Surface((self.width, self.height))

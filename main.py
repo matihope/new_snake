@@ -1,16 +1,17 @@
 #!/usr/bin/python
-
+import sys
 import pygame
-from modules.level import SnakeGame
-from modules.button import Button
-from modules.screen import Screen
+from modules.games.snake.level import SnakeGame
+from modules.gui.button import Button
+from modules.gui.screen import Screen
+from modules.gui.fps_counter import FPSCounter
 
 
-scale = 0.75
+scale = 0.8
 board_width, board_height = 20, 20
 
 smooth = True
-FPS = 60
+FPS = 1000
 mps = 5
 clock = pygame.time.Clock()
 
@@ -60,10 +61,10 @@ def snake_game_loop():
             if e.type == pygame.QUIT:
                 game.snake.dead = True
                 run_game = False
-                pygame.quit()
-                exit('-> User quit')
+                shut_down()
             if e.type == pygame.KEYDOWN:
                 if e.key == pygame.K_ESCAPE:
+                    game.snake.dead = True
                     run_game = False
 
         # Logic
@@ -78,6 +79,7 @@ def snake_game_loop():
 
         score_board.fill(score_board_color)
         score_board.blit(score_txt, (score_board.get_width()//2 - score_txt.get_width()//2, score_txt.get_height()//2))
+        score_board.blit(show_fps(), (5, 5))
         WINDOW.blit(score_board, (BUFF, board_height * TILE_SIZE + (BUFF * 2)))
 
         real_draw(WINDOW, draw_smooth=smooth)
@@ -89,21 +91,23 @@ def snake_game_loop():
 
 def menu():
     menu_screen = Screen()
-    menu_screen.add_button(Button(x=WINDOW_WIDTH//2, y=WINDOW_HEIGHT-75, width=300, height=150,
+    menu_screen.add_button(Button(x=WINDOW_WIDTH//2, y=WINDOW_HEIGHT-75, width=300, height=140,
                                   text='Play snake!', font_size=72, trigger=snake_game_loop, tag='button_play'))
     menu_screen.add_button(Button(x=WINDOW_WIDTH//2, y=WINDOW_HEIGHT-300, width=250, height=100,
                                   text='Change scale', font_size=48, trigger=update_scale, tag='button_scale'))
     menu_screen.add_button(Button(x=WINDOW_WIDTH // 2, y=WINDOW_HEIGHT - 500, width=250, height=100,
                                   text='Toggle smooth', font_size=48, trigger=toggle_smooth,
                                   long_press=False, tag='button_smooth'))
+    menu_screen.add_button(Button(x=WINDOW_WIDTH-30, y=WINDOW_HEIGHT-25, width=100, height=50, 
+                                  align_x='right', align_y='bottom',
+                                  text='Exit', font_size=48, trigger=shut_down,
+                                  long_press=False, tag='button_exit'))
 
     run = True
     while run:
         for e in pygame.event.get():
             if e.type == pygame.QUIT:
                 run = False
-                pygame.quit()
-                exit('-> User quit')
 
         # Logic
         m = pygame.mouse
@@ -126,18 +130,18 @@ def update_scale():
 
 
 def real_draw(surface, draw_smooth=False):
-    """Function that is responsible for drawing to real window"""
-    if draw_smooth:
+    """Function responsible for drawing to real window"""
+    if draw_smooth:  # This looks better, but it's slower for processor
         pygame.transform.smoothscale(surface, (window_width_real, window_height_real), window_real)
     else:
         pygame.transform.scale(surface, (window_width_real, window_height_real), window_real)
 
 
-def show_fps(surface):
-    """
-    Work on that function
-    """
-    pass
+def show_fps():
+    """This function is meant to be run as frequently as possible"""
+    global fps_counter
+    fps_counter.update(pygame.time.get_ticks())
+    return fps_counter.get_fps_label()
 
 
 def toggle_smooth():
@@ -145,11 +149,24 @@ def toggle_smooth():
     smooth = not smooth
 
 
+def shut_down():
+    globals().update(locals())
+
+    # On program shut down
+    running = False
+    fps_counter.running = False
+
+    pygame.quit()
+    exit(" -> User quit")
+
+
 if __name__ == "__main__":
+    pygame.init()
     update_scale_dependents()
 
-    pygame.init()
+    running = True
+    fps_counter = FPSCounter()
 
     menu()
 
-pygame.quit()
+    shut_down()

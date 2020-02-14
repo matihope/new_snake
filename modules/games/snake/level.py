@@ -1,4 +1,4 @@
-from modules import fruit, player
+from modules.games.snake import fruit, player
 from modules.cf import collision
 
 
@@ -21,9 +21,11 @@ class SnakeGame:
             while any([collision(part, self.fruit.pos(), self.tile_size) for part in self.snake.body]):
                 self.fruit.eat_fruit()
 
-        if not (0 <= self.snake.x < self.size_x * self.tile_size) or \
-           not (0 <= self.snake.y < self.size_y * self.tile_size):
-            self.snake.dead = True
+        # if not (0 <= self.snake.x < self.size_x * self.tile_size) or \
+        #    not (0 <= self.snake.y < self.size_y * self.tile_size):
+        #     self.snake.dead = True
+        self.snake.x %= self.size_x * self.tile_size
+        self.snake.y %= self.size_y * self.tile_size
 
         if any([collision(part, self.snake.pos(), self.tile_size) for part in self.snake.body[1:]]):
             self.snake.dead = True

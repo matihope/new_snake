@@ -1,3 +1,6 @@
+# cool functions
+
+
 def collision(one, two, size):
     if one[0] + size <= two[0]:
         return False
